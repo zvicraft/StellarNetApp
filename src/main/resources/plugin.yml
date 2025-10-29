@@ -1,0 +1,6 @@
+name: StellarNet app plugin
+version: '1.0-SNAPSHOT'
+main: com.zvicraft.stellarNetApp.StellarNetApp
+api-version: '1.21'
+authors: [ zvicraft, zvielkoren ]
+website: https://zviel
