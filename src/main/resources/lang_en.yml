@@ -1,0 +1,15 @@
+# SCLevels Language File (English)
+
+# General Messages
+admin_reload_success: "&aConfiguration and language files reloaded successfully."
+reload_failed: "&cFailed to reload configuration and language files. Check console for errors."
+
+
+
+# Error Messages
+player_not_found: "&cPlayer not found: {player}"
+no_permission: "&cYou don't have permission to use this command."
+player_only_command: "&cThis command can only be used by players."
+admin_unknown_subcommand: "&cUnknown subcommand: {subcommand}"
+
+# Placeholders
