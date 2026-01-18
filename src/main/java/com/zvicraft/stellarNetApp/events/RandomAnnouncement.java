@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Zviel Koren
+ * Copyright (c) 2026 Zviel Koren
  * All rights reserved.
  *
  * This source code and its content are the intellectual property of Zviel Koren.
@@ -8,27 +8,68 @@
  *
  */
 
+/*
+ * Copyright (c) 2026 Zviel Koren
+ * All rights reserved.
+ *
+ * This source code and its content are the intellectual property of Zviel Koren.
+ * Unauthorized copying, modification, or distribution of this software,
+ * via any medium, is strictly prohibited without written permission from the author.
+ *
+ */
+
+
 package com.zvicraft.stellarNetApp.events;
 
 import com.zvicraft.stellarNetApp.StellarNetApp;
 import com.zvicraft.stellarNetApp.utils.LangUtiltis;
-import org.bukkit.event.Listener;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 
+import java.util.Random;
 
-/**
- * R
- */
-public class RandomAnnouncement implements Listener {
+public class RandomAnnouncement {
 
-    private StellarNetApp plugin;
-    private static LangUtiltis lang;
+    private final StellarNetApp plugin;
+    private final Random random = new Random();
 
-    private RandomAnnouncement(StellarNetApp plugin) {
+    public RandomAnnouncement(StellarNetApp plugin) {
         this.plugin = plugin;
     }
 
-    // Initialize Class
-    public static void Initialize() {
-    // TODO: add Initialize logic
+    // Call this once in onEnable()
+    public void start() {
+        scheduleNextMessage();
+    }
+
+    public static void test() {
+        messageSettings();
+    }
+
+    private void scheduleNextMessage() {
+        int minMinutes = plugin.getConfig().getInt("minMinutes", 5);
+        int maxMinutes = plugin.getConfig().getInt("maxMinutes", 30);
+
+        int minutes = minMinutes + random.nextInt(maxMinutes - minMinutes + 1);
+        long delayTicks = minutes * 1200L; // 1 min = 1200 ticks
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            messageSettings();
+            // Schedule the next random announcement
+            scheduleNextMessage();
+        }, delayTicks);
+    }
+
+    private static void messageSettings() {
+        //TODO need fix the link and error
+
+        // Generate the announcement each time (supports dynamic reloads)
+        Component announcement = LangUtiltis.getLangComponent(
+                "announcements_messages.messages",
+                LangUtiltis.getLangString("announcements_messages.url"),
+                LangUtiltis.getLangString("announcements_messages.hover")
+        );
+
+        Bukkit.getServer().broadcast(announcement);
     }
 }

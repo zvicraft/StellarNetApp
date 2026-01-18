@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Zviel Koren
+ * Copyright (c) 2026 Zviel Koren
  * All rights reserved.
  *
  * This source code and its content are the intellectual property of Zviel Koren.
@@ -8,14 +8,29 @@
  *
  */
 
+/*
+ * Copyright (c) 2026 Zviel Koren
+ * All rights reserved.
+ *
+ * This source code and its content are the intellectual property of Zviel Koren.
+ * Unauthorized copying, modification, or distribution of this software,
+ * via any medium, is strictly prohibited without written permission from the author.
+ *
+ */
+
+
 package com.zvicraft.stellarNetApp.utils;
 
 import com.zvicraft.stellarNetApp.StellarNetApp;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.List;
 
 public class LangUtiltis {
     public static StellarNetApp plugin;
@@ -62,5 +77,34 @@ public class LangUtiltis {
 
     public static void reloadLang() {
         loadLanguageConfig();
+    }
+    public static Component getLangComponent(String key, String clickUrl, String hoverText) {
+        if (langConfig == null) {
+            plugin.getLogger().warning("Language configuration is not loaded. Key: " + key);
+            return Component.text("Configuration error: " + key);
+        }
+
+        List<String> lines = langConfig.getStringList(key);
+        if (lines == null || lines.isEmpty()) {
+            plugin.getLogger().warning("Missing language key or empty list: " + key);
+            return Component.text("Missing key: " + key);
+        }
+
+        Component comp = Component.empty();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = ChatColor.translateAlternateColorCodes('&', lines.get(i));
+            Component lineComp = Component.text(line);
+
+            // Apply click and hover only on specific lines, e.g., second line
+            if (i == 1 && clickUrl != null && hoverText != null) {
+                lineComp = lineComp.clickEvent(ClickEvent.openUrl(clickUrl))
+                        .hoverEvent(HoverEvent.showText(Component.text(hoverText)));
+            }
+
+            comp = comp.append(lineComp);
+            if (i < lines.size() - 1) comp = comp.append(Component.text("\n"));
+        }
+
+        return comp;
     }
 }

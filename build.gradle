@@ -1,3 +1,15 @@
+
+
+/*
+ * Copyright (c) 2026 Zviel Koren
+ * All rights reserved.
+ *
+ * This source code and its content are the intellectual property of Zviel Koren.
+ * Unauthorized copying, modification, or distribution of this software,
+ * via any medium, is strictly prohibited without written permission from the author.
+ *
+ */
+
 plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.3.1"
@@ -9,8 +21,12 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
     maven {
-        name = "papermc-repo"
+        name = "papermc"
         url = "https://repo.papermc.io/repository/maven-public/"
+
+    }
+    maven {
+        name = "placeholderapi"
         url = 'https://repo.extendedclip.com/releases/'
 
     }
@@ -18,7 +34,8 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-    compileOnly 'me.clip:placeholderapi:2.11.6'
+    implementation("me.clip:placeholderapi:2.11.7")
+
 
 }
 
@@ -27,7 +44,14 @@ tasks {
         // Configure the Minecraft version for our task.
         // This is the only required configuration besides applying the plugin.
         // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("1.21")
+        minecraftVersion("1.21.8")
+            group = 'minecraft'
+            description = 'Runs the Minecraft server with your plugin'
+            mainClass.set('io.papermc.paperclip.Paperclip')
+            standardInput = System.in
+            workingDir = file("$projectDir/server") // Make a subfolder for server files
+            classpath = files()
+
     }
 }
 
