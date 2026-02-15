@@ -11,12 +11,12 @@ announcements_messages:
     - "&aSERVER STORE"
     - ""
     - "&7Did you know we have a &aStore&7?"
-    - "&7You can purchase ranks &"
+    - "&7You can purchase ranks &r"
     - "&7redeem rewards right now!"
     - ""
-    - "&aVISIT NOW!!"
+    - "{LINK}&aVISIT NOW!!"
   hover: "Click to open the link"
-  url: "http://zviel.com"
+  url: "https://zviel.com"
 
 
 # Error Messages

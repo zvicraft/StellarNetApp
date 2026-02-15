@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2026 Zviel Koren
  * All rights reserved.
@@ -26,7 +25,6 @@ import com.zvicraft.stellarNetApp.commands.Test;
 import com.zvicraft.stellarNetApp.events.RandomAnnouncement;
 import com.zvicraft.stellarNetApp.utils.LangUtiltis;
 import com.zvicraft.stellarNetApp.utils.PlaceholderUtiliti;
-
 import com.zvicraft.stellarNetApp.utils.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;

@@ -61,8 +61,6 @@ public class RandomAnnouncement {
     }
 
     private static void messageSettings() {
-        //TODO need fix the link and error
-
         // Generate the announcement each time (supports dynamic reloads)
         Component announcement = LangUtiltis.getLangComponent(
                 "announcements_messages.messages",

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2026 Zviel Koren
  * All rights reserved.
@@ -25,7 +26,7 @@ import com.zvicraft.stellarNetApp.StellarNetApp;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -35,6 +36,8 @@ import java.util.List;
 public class LangUtiltis {
     public static StellarNetApp plugin;
     private static FileConfiguration langConfig;
+
+    private static final LegacyComponentSerializer legacy = LegacyComponentSerializer.legacyAmpersand();
 
     public LangUtiltis(StellarNetApp plugin) {
         this.plugin = plugin;
@@ -61,8 +64,7 @@ public class LangUtiltis {
             return "Missing key: " + key;
         }
 
-        message = ChatColor.translateAlternateColorCodes('&', message);
-
+        // Keep '&' codes here; we'll deserialize to Components where needed.
         if (placeholders != null && placeholders.length > 0) {
             if (placeholders.length % 2 != 0) {
                 plugin.getLogger().warning("Odd number of placeholder arguments for key: " + key);
@@ -92,13 +94,22 @@ public class LangUtiltis {
 
         Component comp = Component.empty();
         for (int i = 0; i < lines.size(); i++) {
-            String line = ChatColor.translateAlternateColorCodes('&', lines.get(i));
-            Component lineComp = Component.text(line);
+            String rawLine = lines.get(i);
+            if (rawLine == null) rawLine = "";
 
-            // Apply click and hover only on specific lines, e.g., second line
-            if (i == 1 && clickUrl != null && hoverText != null) {
-                lineComp = lineComp.clickEvent(ClickEvent.openUrl(clickUrl))
-                        .hoverEvent(HoverEvent.showText(Component.text(hoverText)));
+            boolean makeClickable = rawLine.contains("{LINK}");
+            if (makeClickable) rawLine = rawLine.replace("{LINK}", "");
+
+            Component lineComp = legacy.deserialize(rawLine);
+
+            if (makeClickable && clickUrl != null && !clickUrl.isBlank()) {
+                lineComp = lineComp.clickEvent(ClickEvent.openUrl(clickUrl));
+
+                if (hoverText != null && !hoverText.isBlank()) {
+                    lineComp = lineComp.hoverEvent(
+                            HoverEvent.showText(legacy.deserialize(hoverText))
+                    );
+                }
             }
 
             comp = comp.append(lineComp);
