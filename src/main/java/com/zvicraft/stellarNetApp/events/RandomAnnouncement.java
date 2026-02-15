@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2026 Zviel Koren
  * All rights reserved.
@@ -35,19 +36,16 @@ public class RandomAnnouncement {
     private final Random random = new Random();
 
     public RandomAnnouncement(StellarNetApp plugin) {
-        if (plugin == null) {
-            throw new IllegalArgumentException("plugin cannot be null");
-        }
         this.plugin = plugin;
-    }
-
-    public void test() {
-        messageSettings();
     }
 
     // Call this once in onEnable()
     public void start() {
         scheduleNextMessage();
+    }
+
+    public void test() {
+        messageSettings();
     }
 
     private void scheduleNextMessage() {
@@ -80,6 +78,8 @@ public class RandomAnnouncement {
                 LangUtiltis.getLangString("announcements_messages.hover")
         );
 
-        Bukkit.getServer().broadcast(announcement);
+        for (var player : Bukkit.getOnlinePlayers()) {
+            player.sendMessage(announcement);
+        }
     }
 }

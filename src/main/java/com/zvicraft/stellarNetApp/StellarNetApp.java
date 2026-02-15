@@ -19,7 +19,6 @@
  */
 
 
-
 package com.zvicraft.stellarNetApp;
 
 import com.zvicraft.stellarNetApp.commands.Test;

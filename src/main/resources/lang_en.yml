@@ -16,7 +16,6 @@ announcements_messages:
     - ""
     - "{LINK}&aVISIT NOW!!"
   hover: "Click to open the link"
-  url: "https://zviel.com"
 
 
 # Error Messages
