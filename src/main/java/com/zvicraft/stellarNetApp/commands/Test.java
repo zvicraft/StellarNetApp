@@ -19,8 +19,10 @@
  *
  */
 
+
 package com.zvicraft.stellarNetApp.commands;
 
+import com.zvicraft.stellarNetApp.StellarNetApp;
 import com.zvicraft.stellarNetApp.events.RandomAnnouncement;
 import com.zvicraft.stellarNetApp.utils.LangUtiltis;
 import org.bukkit.command.Command;
@@ -28,6 +30,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class Test implements CommandExecutor {
+    private final StellarNetApp plugin;
+
+    public Test(StellarNetApp plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -45,7 +52,8 @@ public class Test implements CommandExecutor {
                 return true;
             }
 
-            RandomAnnouncement.test();
+            RandomAnnouncement ra = new RandomAnnouncement(plugin);
+            ra.test();
             return true;
         }
 

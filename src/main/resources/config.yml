@@ -28,3 +28,9 @@ language: en
 #Timer Configs
 minMinutes: 30
 maxMinutes: 40
+
+announcements:
+  links:
+    discord: "<DISCORD_URL>"
+    store: "<STORE_URL>"
+    website: "<WEBSITE_URL>"

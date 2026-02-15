@@ -19,6 +19,7 @@
  */
 
 
+
 package com.zvicraft.stellarNetApp;
 
 import com.zvicraft.stellarNetApp.commands.Test;
@@ -54,8 +55,8 @@ public class StellarNetApp extends JavaPlugin implements Listener {
         RandomAnnouncement ra = new RandomAnnouncement(this);
         ra.start();
     }
-    private void registerCommands() {
-        getCommand("test").setExecutor(new Test());
-    }
 
+    private void registerCommands() {
+        getCommand("test").setExecutor(new Test(this));
+    }
 }

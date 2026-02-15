@@ -19,6 +19,16 @@
  *
  */
 
+/*
+ * Copyright (c) 2026 Zviel Koren
+ * All rights reserved.
+ *
+ * This source code and its content are the intellectual property of Zviel Koren.
+ * Unauthorized copying, modification, or distribution of this software,
+ * via any medium, is strictly prohibited without written permission from the author.
+ *
+ */
+
 
 package com.zvicraft.stellarNetApp.utils;
 
@@ -32,12 +42,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LangUtiltis {
     public static StellarNetApp plugin;
     private static FileConfiguration langConfig;
 
     private static final LegacyComponentSerializer legacy = LegacyComponentSerializer.legacyAmpersand();
+    private static final Pattern LINK_TOKEN = Pattern.compile("\\{LINK(?::([a-zA-Z0-9_-]+))?}");
 
     public LangUtiltis(StellarNetApp plugin) {
         this.plugin = plugin;
@@ -80,7 +94,8 @@ public class LangUtiltis {
     public static void reloadLang() {
         loadLanguageConfig();
     }
-    public static Component getLangComponent(String key, String clickUrl, String hoverText) {
+
+    public static Component getLangComponent(String key, Map<String, String> linkUrls, String hoverText) {
         if (langConfig == null) {
             plugin.getLogger().warning("Language configuration is not loaded. Key: " + key);
             return Component.text("Configuration error: " + key);
@@ -97,13 +112,20 @@ public class LangUtiltis {
             String rawLine = lines.get(i);
             if (rawLine == null) rawLine = "";
 
-            boolean makeClickable = rawLine.contains("{LINK}");
-            if (makeClickable) rawLine = rawLine.replace("{LINK}", "");
+            Matcher m = LINK_TOKEN.matcher(rawLine);
+            boolean makeClickable = m.find();
+
+            String linkName = "default";
+            if (makeClickable) {
+                linkName = (m.group(1) != null && !m.group(1).isBlank()) ? m.group(1) : "default";
+                rawLine = m.replaceAll("");
+            }
 
             Component lineComp = legacy.deserialize(rawLine);
 
-            if (makeClickable && clickUrl != null && !clickUrl.isBlank()) {
-                lineComp = lineComp.clickEvent(ClickEvent.openUrl(clickUrl));
+            String url = (linkUrls == null) ? null : linkUrls.get(linkName);
+            if (makeClickable && url != null && !url.isBlank()) {
+                lineComp = lineComp.clickEvent(ClickEvent.openUrl(url));
 
                 if (hoverText != null && !hoverText.isBlank()) {
                     lineComp = lineComp.hoverEvent(

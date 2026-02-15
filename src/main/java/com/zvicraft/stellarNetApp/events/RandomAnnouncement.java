@@ -17,15 +17,16 @@
  * via any medium, is strictly prohibited without written permission from the author.
  *
  */
-
-
 package com.zvicraft.stellarNetApp.events;
 
 import com.zvicraft.stellarNetApp.StellarNetApp;
 import com.zvicraft.stellarNetApp.utils.LangUtiltis;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class RandomAnnouncement {
@@ -34,16 +35,19 @@ public class RandomAnnouncement {
     private final Random random = new Random();
 
     public RandomAnnouncement(StellarNetApp plugin) {
+        if (plugin == null) {
+            throw new IllegalArgumentException("plugin cannot be null");
+        }
         this.plugin = plugin;
+    }
+
+    public void test() {
+        messageSettings();
     }
 
     // Call this once in onEnable()
     public void start() {
         scheduleNextMessage();
-    }
-
-    public static void test() {
-        messageSettings();
     }
 
     private void scheduleNextMessage() {
@@ -60,11 +64,19 @@ public class RandomAnnouncement {
         }, delayTicks);
     }
 
-    private static void messageSettings() {
-        // Generate the announcement each time (supports dynamic reloads)
+    private void messageSettings() {
+        Map<String, String> links = new HashMap<>();
+        ConfigurationSection sec = plugin.getConfig().getConfigurationSection("announcements.links");
+        if (sec != null) {
+            for (String k : sec.getKeys(false)) {
+                String url = sec.getString(k);
+                if (url != null && !url.isBlank()) links.put(k, url);
+            }
+        }
+
         Component announcement = LangUtiltis.getLangComponent(
                 "announcements_messages.messages",
-                LangUtiltis.getLangString("announcements_messages.url"),
+                links,
                 LangUtiltis.getLangString("announcements_messages.hover")
         );
 
