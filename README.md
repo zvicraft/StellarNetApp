@@ -13,9 +13,44 @@ Paper plugin for StellarNet network utilities.
 
 ## Requirements
 
-- Java 21
-- Paper `1.21.8`
-- PlaceholderAPI is optional
+- Runtime:
+  - Java 21
+    - Download: [Eclipse Temurin / Adoptium](https://adoptium.net/)
+  - Paper `1.21.8`
+    - Download: [Paper Downloads](https://papermc.io/downloads/paper)
+- Build:
+  - Gradle wrapper included in this project
+- Optional:
+  - PlaceholderAPI for placeholder support
+    - Project page: [PlaceholderAPI on SpigotMC](https://www.spigotmc.org/resources/placeholderapi.6245/)
+    - Wiki: [PlaceholderAPI Wiki](https://github.com/PlaceholderAPI/PlaceholderAPI/wiki)
+
+## Installation
+
+1. Build the plugin:
+
+```powershell
+./gradlew.bat build
+```
+
+2. Copy the generated jar from `build/libs/` into your Paper server `plugins/` folder.
+
+3. Start the server once to generate:
+
+```text
+plugins/StellarNetApp/config.yml
+plugins/StellarNetApp/lang_en.yml
+```
+
+4. Edit config and lang files as needed.
+
+5. Reload or restart the server.
+
+Useful links:
+
+- [PaperMC](https://papermc.io/)
+- [Paper Docs](https://docs.papermc.io/)
+- [Java Downloads](https://adoptium.net/)
 
 ## Build
 
