@@ -7,16 +7,6 @@
  * via any medium, is strictly prohibited without written permission from the author.
  *
  */
-
-/*
- * Copyright (c) 2026 Zviel Koren
- * All rights reserved.
- *
- * This source code and its content are the intellectual property of Zviel Koren.
- * Unauthorized copying, modification, or distribution of this software,
- * via any medium, is strictly prohibited without written permission from the author.
- *
- */
 package com.zvicraft.stellarNetApp.events;
 
 import com.zvicraft.stellarNetApp.StellarNetApp;
