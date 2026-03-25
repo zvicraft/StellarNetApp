@@ -45,7 +45,7 @@ public class ChatGames implements Listener {
 
     public ChatGames(StellarNetApp plugin) {
         this.plugin = plugin;
-        this.sound =  new SoundUtils(plugin);
+        this.sound = new SoundUtils(plugin);
     }
 
     public void start() {
