@@ -21,16 +21,18 @@
 
 package com.zvicraft.stellarNetApp;
 
+import com.zvicraft.stellarNetApp.commands.ReloadCommand;
 import com.zvicraft.stellarNetApp.commands.Test;
+import com.zvicraft.stellarNetApp.events.ChatGames;
 import com.zvicraft.stellarNetApp.events.RandomAnnouncement;
 import com.zvicraft.stellarNetApp.utils.LangUtiltis;
 import com.zvicraft.stellarNetApp.utils.PlaceholderUtiliti;
-import com.zvicraft.stellarNetApp.utils.SoundUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class StellarNetApp extends JavaPlugin implements Listener {
+public class StellarNetApp extends JavaPlugin {
+    private RandomAnnouncement randomAnnouncement;
+    private ChatGames chatGames;
 
     @Override
     public void onEnable() {
@@ -45,16 +47,27 @@ public class StellarNetApp extends JavaPlugin implements Listener {
 
     private void registerEvents() {
         saveDefaultConfig();
-        LangUtiltis langUtil = new LangUtiltis(this);
+        new LangUtiltis(this);
         LangUtiltis.loadLanguageConfig();
 
-        SoundUtils soundUtils = new SoundUtils(this);
+        randomAnnouncement = new RandomAnnouncement(this);
+        randomAnnouncement.start();
 
-        RandomAnnouncement ra = new RandomAnnouncement(this);
-        ra.start();
+        chatGames = new ChatGames(this);
+        Bukkit.getPluginManager().registerEvents(chatGames, this);
+        chatGames.start();
     }
 
     private void registerCommands() {
         getCommand("test").setExecutor(new Test(this));
+        getCommand("reload").setExecutor(new ReloadCommand(this));
+    }
+
+    public RandomAnnouncement getRandomAnnouncement() {
+        return randomAnnouncement;
+    }
+
+    public ChatGames getChatGames() {
+        return chatGames;
     }
 }

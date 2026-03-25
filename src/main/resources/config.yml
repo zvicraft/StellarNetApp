@@ -39,3 +39,54 @@ announcements:
     name: BLOCK_ANVIL_PLACE
     volume: 1.0
     pitch: 1.0
+
+chatgames:
+  enabled: true
+  interval_minutes: 10
+  time_limit_seconds: 120
+  max_number: 100
+  reward_text: "something cool"
+  scramble_words:
+    - "minecraft"
+    - "peaceful"
+    - "lifesteal"
+    - "notch apple"
+    - "warden"
+    - "nether"
+    - "skyblock"
+    - "end"
+    - "overworld"
+    - "steve"
+    - "alex"
+    - "enchanting"
+    - "diamonds"
+    - "redstone"
+    - "gold"
+    - "iron"
+    - "lapis"
+    - "leaderboards"
+    - "spells"
+    - "catacreeper"
+    - "isaactheprolol"
+    - "developer"
+    - "owner"
+    - "admin"
+    - "mod"
+    - "helper"
+    - "builder"
+    - "pneumonoultramicroscopicsilicovolcanoconiosis"
+    - "Hippopotomonstrosesquippedaliophobia"
+    - "skeleton"
+    - "creeper"
+    - "zombie"
+    - "dragon"
+    - "wither"
+    - "explosion"
+    - "computer"
+    - "phone"
+    - "easteregg"
+    - "secret"
+    - "bugged"
+    - "scramble"
+    - "sword"
+    - "characters"

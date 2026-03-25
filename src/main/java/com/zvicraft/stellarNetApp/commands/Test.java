@@ -32,8 +32,15 @@ public class Test implements CommandExecutor {
             return true;
         }
 
-        RandomAnnouncement ra = new RandomAnnouncement(plugin);
-        ra.test();
+        if (args.length > 0 && args[0].equalsIgnoreCase("chatgame")) {
+            plugin.getChatGames().test();
+            return true;
+        }
+
+        RandomAnnouncement ra = plugin.getRandomAnnouncement();
+        if (ra != null) {
+            ra.test();
+        }
         return true;
     }
 }

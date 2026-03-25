@@ -35,6 +35,44 @@ announcements_messages:
         - ""
         - "{LINK:website}&eOPEN WEBSITE"
 
+chatgames:
+  scramble:
+    messages:
+      - ""
+      - "   &x&6&6&F&F&7&7&lCHAT GAME"
+      - ""
+      - "   &fUnscramble the following word as fast as possible"
+      - "   &ffor rewards, send in chat your guess!"
+      - ""
+      - "   &fWord: &b{message}"
+      - ""
+      - "   &x&6&6&F&F&7&7Reward: &f{reward}"
+  math:
+    messages:
+      - ""
+      - "   &x&6&6&B&B&F&F&lCHAT GAME"
+      - ""
+      - "   &fAnswer the following math question as fast"
+      - "   &fas possible for rewards! &7(2 digit precision)"
+      - ""
+      - "   &fQuestion: &b{message}"
+      - ""
+      - "   &x&6&6&B&B&F&FReward: &f{reward}"
+  winner:
+    messages:
+      - ""
+      - "   &x&6&6&B&B&F&F&lCHAT GAME"
+      - ""
+      - "&f{winner} was first person to answer with \"{message}\"!"
+      - ""
+  timeout:
+    messages:
+      - ""
+      - "   &x&6&6&B&B&F&F&lCHAT GAME"
+      - ""
+      - "&fNo one answered in time, the answer was \"{answer}\"."
+      - ""
+
 # Error Messages
 player_not_found: "&cPlayer not found: {player}"
 no_permission: "&cYou don't have permission to use this command."

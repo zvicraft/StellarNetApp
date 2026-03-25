@@ -30,25 +30,36 @@ public class ReloadCommand implements CommandExecutor {
             sender.sendMessage(LangUtiltis.getLangString("no_permission"));
             return true;
         }
-        if (args.length != 0) {
-            sender.sendMessage(LangUtiltis.getLangString("admin_unknown_subcommand").replace("{command}", "/stellarnetapp reload config|lang"));
+
+        if (args.length > 1) {
+            sender.sendMessage(LangUtiltis.getLangString("admin_unknown_subcommand", "{subcommand}", "/reload [config|lang|all]"));
             return true;
         }
-        if (args[1].equalsIgnoreCase("reload")) {
+
+        if (args.length == 0 || args[0].equalsIgnoreCase("all")) {
             plugin.reloadConfig();
             LangUtiltis.reloadLang();
+            plugin.getRandomAnnouncement().start();
+            plugin.getChatGames().start();
             sender.sendMessage(LangUtiltis.getLangString("admin_reload_success"));
+            return true;
         }
 
-
-        if (args[2].equalsIgnoreCase("config")) {
+        if (args[0].equalsIgnoreCase("config")) {
             plugin.reloadConfig();
+            plugin.getRandomAnnouncement().start();
+            plugin.getChatGames().start();
             sender.sendMessage(LangUtiltis.getLangString("admin_reload_success"));
+            return true;
         }
-        if (args[2].equalsIgnoreCase("lang")) {
+
+        if (args[0].equalsIgnoreCase("lang")) {
             LangUtiltis.reloadLang();
             sender.sendMessage(LangUtiltis.getLangString("admin_reload_success"));
+            return true;
         }
+
+        sender.sendMessage(LangUtiltis.getLangString("admin_unknown_subcommand", "{subcommand}", args[0]));
         return true;
     }
 }

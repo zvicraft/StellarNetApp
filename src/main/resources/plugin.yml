@@ -9,10 +9,10 @@ softdepend: ["PlaceholderAPI"]
 commands:
   test:
     description: Testing command
-    usage: /<command>
+    usage: /<command> [chatgame]
     permission: stellarnetapp.admin.test
 
   reload:
     description: Reloads the plugin
-    usage: /<command>
+    usage: /<command> [config|lang|all]
     permission: stellarnetapp.admin.reload

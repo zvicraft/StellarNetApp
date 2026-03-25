@@ -28,6 +28,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,32 @@ public class LangUtiltis {
 
     public static void reloadLang() {
         loadLanguageConfig();
+    }
+
+    public static List<String> getLangStringList(String key, String... placeholders) {
+        if (langConfig == null) {
+            plugin.getLogger().warning("Language configuration is not loaded. Key: " + key);
+            return List.of("Configuration error: " + key);
+        }
+
+        List<String> lines = langConfig.getStringList(key);
+        if (lines.isEmpty()) {
+            plugin.getLogger().warning("Missing language key or empty list: " + key);
+            return List.of("Missing key: " + key);
+        }
+
+        List<String> result = new ArrayList<>();
+        for (String line : lines) {
+            String parsedLine = line;
+            if (placeholders != null && placeholders.length > 0) {
+                for (int i = 0; i < placeholders.length - 1; i += 2) {
+                    parsedLine = parsedLine.replace(placeholders[i], placeholders[i + 1]);
+                }
+            }
+            result.add(parsedLine);
+        }
+
+        return result;
     }
 
     public static boolean hasLangPath(String key) {
