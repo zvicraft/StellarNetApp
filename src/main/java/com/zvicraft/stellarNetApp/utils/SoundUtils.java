@@ -52,15 +52,27 @@ public class SoundUtils {
             return null;
         }
 
-        String trimmedSoundName = soundName.trim();
-        try {
-            return Sound.valueOf(trimmedSoundName.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException ignored) {
-            String normalizedKey = trimmedSoundName
-                    .toLowerCase(Locale.ROOT)
-                    .replace("minecraft:", "");
-
-            return Registry.SOUNDS.get(NamespacedKey.minecraft(normalizedKey));
+        NamespacedKey key = toSoundKey(soundName.trim());
+        if (key == null) {
+            return null;
         }
+
+        return Registry.SOUNDS.get(key);
+    }
+
+    private NamespacedKey toSoundKey(String input) {
+        String normalized = input.trim().toLowerCase(Locale.ROOT);
+        if (normalized.isEmpty()) {
+            return null;
+        }
+
+        if (normalized.contains(":")) {
+            String[] parts = normalized.split(":", 2);
+            String namespace = parts[0];
+            String key = parts[1].replace('_', '.');
+            return new NamespacedKey(namespace, key);
+        }
+
+        return NamespacedKey.minecraft(normalized.replace('_', '.'));
     }
 }
