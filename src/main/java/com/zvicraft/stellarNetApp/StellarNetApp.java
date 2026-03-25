@@ -59,8 +59,14 @@ public class StellarNetApp extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("test").setExecutor(new Test(this));
-        getCommand("reload").setExecutor(new ReloadCommand(this));
+        Test testCommand = new Test(this);
+        ReloadCommand reloadCommand = new ReloadCommand(this);
+
+        getCommand("test").setExecutor(testCommand);
+        getCommand("test").setTabCompleter(testCommand);
+
+        getCommand("reload").setExecutor(reloadCommand);
+        getCommand("reload").setTabCompleter(reloadCommand);
     }
 
     public RandomAnnouncement getRandomAnnouncement() {

@@ -17,8 +17,11 @@ import com.zvicraft.stellarNetApp.utils.LangUtiltis;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
-public class Test implements CommandExecutor {
+import java.util.List;
+
+public class Test implements CommandExecutor, TabCompleter {
     private final StellarNetApp plugin;
 
     public Test(StellarNetApp plugin) {
@@ -42,5 +45,20 @@ public class Test implements CommandExecutor {
             ra.test();
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (!sender.hasPermission("stellarnetapp.admin.test")) {
+            return List.of();
+        }
+
+        if (args.length == 1) {
+            return List.of("chatgame").stream()
+                    .filter(option -> option.startsWith(args[0].toLowerCase()))
+                    .toList();
+        }
+
+        return List.of();
     }
 }

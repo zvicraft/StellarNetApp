@@ -15,9 +15,12 @@ import com.zvicraft.stellarNetApp.utils.LangUtiltis;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 
-public class ReloadCommand implements CommandExecutor {
+import java.util.List;
+
+public class ReloadCommand implements CommandExecutor, TabCompleter {
     private final StellarNetApp plugin;
 
     public ReloadCommand(StellarNetApp plugin) {
@@ -61,5 +64,20 @@ public class ReloadCommand implements CommandExecutor {
 
         sender.sendMessage(LangUtiltis.getLangString("admin_unknown_subcommand", "{subcommand}", args[0]));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (!sender.hasPermission("stellarnetapp.admin.reload")) {
+            return List.of();
+        }
+
+        if (args.length == 1) {
+            return List.of("all", "config", "lang").stream()
+                    .filter(option -> option.startsWith(args[0].toLowerCase()))
+                    .toList();
+        }
+
+        return List.of();
     }
 }
