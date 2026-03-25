@@ -6,24 +6,39 @@ reload_failed: "&cFailed to reload configuration and language files. Check conso
 
 # Specific Messages
 announcements_messages:
-  prefix: "📢"
-  messages:
-    - "&aSERVER STORE"
-    - ""
-    - "&7Did you know we have a &aStore&7?"
-    - "&7You can purchase ranks &r"
-    - "&7redeem rewards right now!"
-    - ""
-    - "{LINK}&aVISIT NOW!!"
+  prefix: "&7-----&f[Info]&7-----"
   hover: "Click to open the link"
-
+  variants:
+    store:
+      messages:
+        - "&aSERVER STORE"
+        - ""
+        - "&7Did you know we have a &aStore&7?"
+        - "&7You can purchase ranks and"
+        - "&7redeem rewards right now!"
+        - ""
+        - "{LINK:store}&aVISIT NOW!!"
+    discord:
+      messages:
+        - "&bJOIN OUR DISCORD"
+        - ""
+        - "&7Stay updated with events,"
+        - "&7announcements and giveaways."
+        - ""
+        - "{LINK:discord}&bJOIN NOW!!"
+    website:
+      messages:
+        - "&eVISIT OUR WEBSITE"
+        - ""
+        - "&7Read updates, guides,"
+        - "&7and server news online."
+        - ""
+        - "{LINK:website}&eOPEN WEBSITE"
 
 # Error Messages
 player_not_found: "&cPlayer not found: {player}"
 no_permission: "&cYou don't have permission to use this command."
 player_only_command: "&cThis command can only be used by players."
 admin_unknown_subcommand: "&cUnknown subcommand: {subcommand}"
-
-
 
 # Placeholders

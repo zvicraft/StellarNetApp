@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (c) 2026 Zviel Koren
  * All rights reserved.
@@ -19,8 +17,6 @@
  * via any medium, is strictly prohibited without written permission from the author.
  *
  */
-
-
 package com.zvicraft.stellarNetApp.utils;
 
 import com.zvicraft.stellarNetApp.StellarNetApp;
@@ -32,8 +28,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,11 +39,11 @@ public class LangUtiltis {
     public static StellarNetApp plugin;
     private static FileConfiguration langConfig;
 
-    private static final LegacyComponentSerializer legacy = LegacyComponentSerializer.legacyAmpersand();
+    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
     private static final Pattern LINK_TOKEN = Pattern.compile("\\{LINK(?::([a-zA-Z0-9_-]+))?}");
 
     public LangUtiltis(StellarNetApp plugin) {
-        this.plugin = plugin;
+        LangUtiltis.plugin = plugin;
     }
 
     public static void loadLanguageConfig() {
@@ -69,7 +67,6 @@ public class LangUtiltis {
             return "Missing key: " + key;
         }
 
-        // Keep '&' codes here; we'll deserialize to Components where needed.
         if (placeholders != null && placeholders.length > 0) {
             if (placeholders.length % 2 != 0) {
                 plugin.getLogger().warning("Odd number of placeholder arguments for key: " + key);
@@ -86,6 +83,25 @@ public class LangUtiltis {
         loadLanguageConfig();
     }
 
+    public static boolean hasLangPath(String key) {
+        return langConfig != null && langConfig.contains(key);
+    }
+
+    public static Set<String> getSectionKeys(String key) {
+        if (langConfig == null) {
+            plugin.getLogger().warning("Language configuration is not loaded. Key: " + key);
+            return Collections.emptySet();
+        }
+
+        var section = langConfig.getConfigurationSection(key);
+        if (section == null) {
+            plugin.getLogger().warning("Missing language section: " + key);
+            return Collections.emptySet();
+        }
+
+        return section.getKeys(false);
+    }
+
     public static Component getLangComponent(String key, Map<String, String> linkUrls, String hoverText) {
         if (langConfig == null) {
             plugin.getLogger().warning("Language configuration is not loaded. Key: " + key);
@@ -93,42 +109,79 @@ public class LangUtiltis {
         }
 
         List<String> lines = langConfig.getStringList(key);
-        if (lines == null || lines.isEmpty()) {
+        if (lines.isEmpty()) {
             plugin.getLogger().warning("Missing language key or empty list: " + key);
             return Component.text("Missing key: " + key);
         }
 
-        Component comp = Component.empty();
+        return buildMultilineComponent(lines, linkUrls, hoverText);
+    }
+
+    private static Component buildMultilineComponent(List<String> lines, Map<String, String> linkUrls, String hoverText) {
+        Component result = Component.empty();
+
         for (int i = 0; i < lines.size(); i++) {
-            String rawLine = lines.get(i);
-            if (rawLine == null) rawLine = "";
+            result = result.append(buildLineComponent(lines.get(i), linkUrls, hoverText));
 
-            Matcher m = LINK_TOKEN.matcher(rawLine);
-            boolean makeClickable = m.find();
-
-            String linkName = "default";
-            if (makeClickable) {
-                linkName = (m.group(1) != null && !m.group(1).isBlank()) ? m.group(1) : "default";
-                rawLine = m.replaceAll("");
+            if (i < lines.size() - 1) {
+                result = result.append(Component.text("\n"));
             }
-
-            Component lineComp = legacy.deserialize(rawLine);
-
-            String url = (linkUrls == null) ? null : linkUrls.get(linkName);
-            if (makeClickable && url != null && !url.isBlank()) {
-                lineComp = lineComp.clickEvent(ClickEvent.openUrl(url));
-
-                if (hoverText != null && !hoverText.isBlank()) {
-                    lineComp = lineComp.hoverEvent(
-                            HoverEvent.showText(legacy.deserialize(hoverText))
-                    );
-                }
-            }
-
-            comp = comp.append(lineComp);
-            if (i < lines.size() - 1) comp = comp.append(Component.text("\n"));
         }
 
-        return comp;
+        return result;
+    }
+
+    private static Component buildLineComponent(String rawLine, Map<String, String> linkUrls, String hoverText) {
+        String safeLine = rawLine == null ? "" : rawLine;
+
+        LinkParseResult parseResult = parseLinkToken(safeLine);
+        Component lineComponent = LEGACY.deserialize(parseResult.textWithoutToken());
+
+        if (!parseResult.clickable()) {
+            return lineComponent;
+        }
+
+        String url = resolveUrl(linkUrls, parseResult.linkName());
+        if (url == null || url.isBlank()) {
+            return lineComponent;
+        }
+
+        return applyInteraction(lineComponent, url, hoverText);
+    }
+
+    private static LinkParseResult parseLinkToken(String line) {
+        Matcher matcher = LINK_TOKEN.matcher(line);
+
+        if (!matcher.find()) {
+            return new LinkParseResult(line, false, "default");
+        }
+
+        String linkName = matcher.group(1);
+        if (linkName == null || linkName.isBlank()) {
+            linkName = "default";
+        }
+
+        String textWithoutToken = matcher.replaceAll("");
+        return new LinkParseResult(textWithoutToken, true, linkName);
+    }
+
+    private static String resolveUrl(Map<String, String> linkUrls, String linkName) {
+        if (linkUrls == null) {
+            return null;
+        }
+        return linkUrls.get(linkName);
+    }
+
+    private static Component applyInteraction(Component component, String url, String hoverText) {
+        Component result = component.clickEvent(ClickEvent.openUrl(url));
+
+        if (hoverText != null && !hoverText.isBlank()) {
+            result = result.hoverEvent(HoverEvent.showText(LEGACY.deserialize(hoverText)));
+        }
+
+        return result;
+    }
+
+    private record LinkParseResult(String textWithoutToken, boolean clickable, String linkName) {
     }
 }

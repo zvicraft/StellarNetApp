@@ -32,8 +32,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class StellarNetApp extends JavaPlugin implements Listener {
 
-
-
     @Override
     public void onEnable() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) { //
@@ -46,9 +44,10 @@ public class StellarNetApp extends JavaPlugin implements Listener {
     }
 
     private void registerEvents() {
-        LangUtiltis langUtil = new LangUtiltis(this);
-        langUtil.loadLanguageConfig();
         saveDefaultConfig();
+        LangUtiltis langUtil = new LangUtiltis(this);
+        LangUtiltis.loadLanguageConfig();
+
         SoundUtils soundUtils = new SoundUtils(this);
 
         RandomAnnouncement ra = new RandomAnnouncement(this);

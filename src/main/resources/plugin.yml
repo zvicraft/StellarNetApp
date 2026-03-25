@@ -11,3 +11,8 @@ commands:
     description: Testing command
     usage: /<command>
     permission: stellarnetapp.admin.test
+
+  reload:
+    description: Reloads the plugin
+    usage: /<command>
+    permission: stellarnetapp.admin.reload

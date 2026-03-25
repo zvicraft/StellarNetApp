@@ -34,3 +34,8 @@ announcements:
     discord: "<DISCORD_URL>"
     store: "<STORE_URL>"
     website: "<WEBSITE_URL>"
+
+  sound:
+    name: BLOCK_ANVIL_PLACE
+    volume: 1.0
+    pitch: 1.0
