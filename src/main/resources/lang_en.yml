@@ -7,6 +7,7 @@ reload_failed: "&cFailed to reload configuration and language files. Check conso
 # Specific Messages
 announcements_messages:
   prefix: "&7-----&f[Info]&7-----"
+  suffix: "&7---------------"
   hover: "Click to open the link"
   variants:
     store:

@@ -82,12 +82,25 @@ public class RandomAnnouncement {
 
         Component announcement = LangUtiltis.getLangComponent(announcementPath, links, hoverText);
         String prefixText = LangUtiltis.getLangString("announcements_messages.prefix");
+        String suffixText = LangUtiltis.getLangString("announcements_messages.suffix");
+
+        Component finalMessage = Component.empty();
         if (!prefixText.isBlank()) {
-            announcement = LEGACY.deserialize(prefixText + " ").append(announcement);
+            finalMessage = finalMessage
+                    .append(LEGACY.deserialize(prefixText))
+                    .append(Component.text("\n\n"));
+        }
+
+        finalMessage = finalMessage.append(announcement);
+
+        if (!suffixText.isBlank()) {
+            finalMessage = finalMessage
+                    .append(Component.text("\n"))
+                    .append(LEGACY.deserialize(suffixText));
         }
 
         for (var player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(announcement);
+            player.sendMessage(finalMessage);
             sound.playLevelUpSound(player, "announcements");
         }
     }
