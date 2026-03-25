@@ -11,6 +11,7 @@ package com.zvicraft.stellarNetApp.events;
 
 import com.zvicraft.stellarNetApp.StellarNetApp;
 import com.zvicraft.stellarNetApp.utils.LangUtiltis;
+import com.zvicraft.stellarNetApp.utils.SoundUtils;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -40,9 +41,11 @@ public class ChatGames implements Listener {
     private String answer;
     private String winner;
     private String winnerMessage;
+    private final SoundUtils sound;
 
     public ChatGames(StellarNetApp plugin) {
         this.plugin = plugin;
+        this.sound =  new SoundUtils(plugin);
     }
 
     public void start() {
@@ -215,20 +218,27 @@ public class ChatGames implements Listener {
                     "{message}", message,
                     "{reward}", rewardText
             ));
-            return;
+        } else {
+            broadcastBlock(LangUtiltis.getLangStringList(
+                    "chatgames.scramble.messages",
+                    "{message}", message,
+                    "{reward}", rewardText
+            ));
         }
 
-        broadcastBlock(LangUtiltis.getLangStringList(
-                "chatgames.scramble.messages",
-                "{message}", message,
-                "{reward}", rewardText
-        ));
+        playStartSound();
     }
 
     private void broadcastBlock(List<String> lines) {
         for (String line : lines) {
             Component component = LEGACY.deserialize(line);
             Bukkit.broadcast(component);
+        }
+    }
+
+    private void playStartSound() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            sound.playLevelUpSound(player, "chatgames");
         }
     }
 

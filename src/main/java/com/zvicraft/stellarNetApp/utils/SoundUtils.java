@@ -52,11 +52,15 @@ public class SoundUtils {
             return null;
         }
 
-        String normalizedKey = soundName
-                .toLowerCase(Locale.ROOT)
-                .replace("minecraft:", "")
-                .replace('_', '.');
+        String trimmedSoundName = soundName.trim();
+        try {
+            return Sound.valueOf(trimmedSoundName.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException ignored) {
+            String normalizedKey = trimmedSoundName
+                    .toLowerCase(Locale.ROOT)
+                    .replace("minecraft:", "");
 
-        return Registry.SOUNDS.get(NamespacedKey.minecraft(normalizedKey));
+            return Registry.SOUNDS.get(NamespacedKey.minecraft(normalizedKey));
+        }
     }
 }

@@ -46,6 +46,10 @@ chatgames:
   time_limit_seconds: 120
   max_number: 100
   reward_text: "something cool"
+  sound:
+    name: BLOCK_NOTE_BLOCK_PLING
+    volume: 1.0
+    pitch: 1.2
   scramble_words:
     - "minecraft"
     - "peaceful"
